@@ -1,6 +1,5 @@
 #include "BLEServer.h"
-
-
+#include <Arduino.h>
 
 FanBLEServer::FanBLEServer(MessageBroker* messageBroker){
     m_messageBroker = messageBroker;
@@ -13,9 +12,9 @@ FanBLEServer::FanBLEServer(MessageBroker* messageBroker){
                                             BLECharacteristic::PROPERTY_WRITE
                                         );
 
-    pCharacteristic->setValue(0);
+    pCharacteristic->setValue("0");
     
-   // pCharacteristic->setCallbacks(new BleCallbacks(messageBroker));
+    pCharacteristic->setCallbacks(new BleCallbacks(messageBroker));
     pService->start();
     // BLEAdvertising *pAdvertising = pServer->getAdvertising();  // this still is working for backward compatibility
     BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
@@ -23,5 +22,6 @@ FanBLEServer::FanBLEServer(MessageBroker* messageBroker){
     pAdvertising->setScanResponse(true);
     pAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
     pAdvertising->setMinPreferred(0x12);
-    pServer->getAdvertising()->start();
+    BLEDevice::startAdvertising();
+    Serial.println("Characteristic defined! Now you can read it in your phone!");
 }
