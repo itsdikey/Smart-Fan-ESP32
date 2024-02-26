@@ -1,6 +1,7 @@
 #include "deviceState/DeviceState.h"
 #include "messageBroker/MessageBroker.h"
 #include "bleService/BLEServer.h"
+#include "systems/DeviceControlSystem.h"
 #include <Arduino.h>
 
 // See the following for generating UUIDs:
@@ -14,6 +15,7 @@ void setup() {
   MessageBroker *messageBroker = new MessageBroker();
   DeviceState *deviceState = new DeviceState(messageBroker);
   FanBLEServer *fanBleServer = new FanBLEServer(messageBroker);
+  DeviceControlSystem *deviceControlSystem = new DeviceControlSystem(messageBroker, deviceState);
 }
 
 void loop() {

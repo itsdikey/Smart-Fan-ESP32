@@ -3,11 +3,8 @@
 
 class System{
     public:
-    void loop();
+    virtual ~System();
+    virtual void loop();
 };
-
-void System::loop(){
-    return;
-}
 
 #endif

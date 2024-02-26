@@ -6,15 +6,16 @@ FanBLEServer::FanBLEServer(MessageBroker* messageBroker){
     BLEDevice::init("Vivax Smart Fan");
     BLEServer *pServer = BLEDevice::createServer();
     BLEService *pService = pServer->createService(SERVICE_UUID);
-    BLECharacteristic *pCharacteristic = pService->createCharacteristic(
+    this->pCharacteristic = pService->createCharacteristic(
                                             SPEED_CHARACTERISTIC_UUID,
                                             BLECharacteristic::PROPERTY_READ |
-                                            BLECharacteristic::PROPERTY_WRITE
+                                            BLECharacteristic::PROPERTY_WRITE |
+                                            BLECharacteristic::PROPERTY_NOTIFY
                                         );
 
-    pCharacteristic->setValue("0");
+    this->pCharacteristic->setValue("0");
     
-    pCharacteristic->setCallbacks(new BleCallbacks(messageBroker));
+    this->pCharacteristic->setCallbacks(new BleCallbacks(messageBroker));
     pService->start();
     // BLEAdvertising *pAdvertising = pServer->getAdvertising();  // this still is working for backward compatibility
     BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
@@ -24,4 +25,11 @@ FanBLEServer::FanBLEServer(MessageBroker* messageBroker){
     pAdvertising->setMinPreferred(0x12);
     BLEDevice::startAdvertising();
     Serial.println("Characteristic defined! Now you can read it in your phone!");
+}
+
+void FanBLEServer::setSpeedValue(int value){
+    char valueConverted = '0' + value;
+
+    this->pCharacteristic->setValue(std::string(1, valueConverted));
+    this->pCharacteristic->notify(true);
 }
