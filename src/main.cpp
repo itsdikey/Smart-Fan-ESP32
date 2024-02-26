@@ -1,22 +1,25 @@
 #include "deviceState/DeviceState.h"
-#include "messageBroker/MessageBroker.h"
+#include "messages/MessageQueueInt.h"
 #include "bleService/BLEServer.h"
 #include "systems/DeviceControlSystem.h"
+#include "messages/Topics.h"
 #include <Arduino.h>
 
-// See the following for generating UUIDs:
-// https://www.uuidgenerator.net/
+MessageQueueInt* messageQueueInt;
+DeviceControlSystem *deviceControlSystem ;
 
-//#define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
-//#define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 
 void setup() {
   Serial.begin(115200);
-  MessageBroker *messageBroker = new MessageBroker();
-  DeviceState *deviceState = new DeviceState(messageBroker);
-  FanBLEServer *fanBleServer = new FanBLEServer(messageBroker);
-  DeviceControlSystem *deviceControlSystem = new DeviceControlSystem(messageBroker, deviceState);
+  messageQueueInt = new MessageQueueInt();
+
+  
+  DeviceState *deviceState = new DeviceState(messageQueueInt);
+  FanBLEServer *fanBleServer = new FanBLEServer(messageQueueInt);
+  deviceControlSystem = new DeviceControlSystem(messageQueueInt, deviceState);
 }
 
 void loop() {
+    deviceControlSystem->loop();
+    messageQueueInt->popLast();
 }

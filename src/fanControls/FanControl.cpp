@@ -3,9 +3,8 @@
 
 
 
-FanControl::FanControl(MessageBroker messageBroker){
-    this->m_messageBroker = messageBroker;
-}
+FanControl::FanControl(MessageQueueInt messageQueue) : m_messageQueue(messageQueue){
+};
 
 void FanControl::setSpeed(FanSpeed fanSpeed){
     this->m_fanSpeed = fanSpeed;

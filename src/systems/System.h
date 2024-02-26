@@ -3,7 +3,8 @@
 
 class System{
     public:
-    virtual ~System();
+    virtual ~System()
+{ }
     virtual void loop();
 };
 

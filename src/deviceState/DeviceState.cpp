@@ -8,8 +8,7 @@ FanSpeed DeviceState::getSpeed(){
 
 void DeviceState::setSpeed(FanSpeed speed){
     this->m_speed = speed;
-    ValueMessage<FanSpeed>* message = new ValueMessage<FanSpeed>(speed);
-    m_messageBroker->broadcast(TopicSpeedChange, *message);
+    m_messageQueueInt->pushMessage(TopicSpeedChange, speed);
 }
 
 ScreenState DeviceState::getScreenState(){
@@ -19,10 +18,11 @@ ScreenState DeviceState::getScreenState(){
 void DeviceState::setScreenState(ScreenState state){
     this->m_state = state;
      ValueMessage<ScreenState>* message = new ValueMessage<ScreenState>(state);
-    m_messageBroker->broadcast(TopicScreenChange, *message);
+    
+    m_messageQueueInt->pushMessage(TopicScreenChange, state);
 }
 
-DeviceState::DeviceState(MessageBroker* messageBroker){
-    this->m_messageBroker = messageBroker;
+DeviceState::DeviceState(MessageQueueInt* messageBroker){
+    this->m_messageQueueInt = messageBroker;
 }
 

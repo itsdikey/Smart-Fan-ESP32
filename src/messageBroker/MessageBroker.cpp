@@ -1,21 +1,28 @@
 #include "MessageBroker.h"
+#include "messages/ValueMessage.h"
+#include "Arduino.h"
 
-void MessageBroker::broadcast(TOPIC topic, Message& message){
-    if(this->m_callbacks.find(topic) != this->m_callbacks.end())
-    {
-        for(size_t i =0; i<this->m_callbacks[topic].size(); i++)
-        {
-            this->m_callbacks[topic][i].onMessageReceived(topic, message);
-        } 
-    }
+MessageBroker::MessageBroker(TOPIC maxTopic){
+    callbackMap = new SubscriptionMap(maxTopic);
 }
 
-void MessageBroker::subscribe(TOPIC topic, MessageSubscriber callback){
-    if(this->m_callbacks.find(topic) != this->m_callbacks.end())
-    {
-        m_callbacks[topic].push_back(callback);
-    }
-    else{
-        m_callbacks[topic] = {callback};
-    }
+
+void MessageBroker::broadcast(TOPIC topic, Message& message){
+    // if(this->callbackMap->has(topic)){
+    //     SubscriberListIterator* iterator = this->callbackMap->get(topic)->iterator();
+
+    //     while(iterator->hasMore()){
+    //         iterator->getNext()->value->onMessageReceived(topic, message);
+    //     }
+    // }
+}
+
+void MessageBroker::subscribe(TOPIC topic, MessageSubscriber& callback){
+    Serial.println("Subscribe trying");
+    Serial.println("Just checking");
+    Serial.println(callbackMap==nullptr?"Null":"Not Null");
+    Message* x = new ValueMessage<int>(10);
+    callback.onMessageReceived(123, *x);
+    callbackMap->add(topic, callback);
+    Serial.println("Subscribtion added");
 }

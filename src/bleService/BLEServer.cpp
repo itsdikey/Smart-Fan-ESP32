@@ -1,8 +1,8 @@
 #include "BLEServer.h"
 #include <Arduino.h>
 
-FanBLEServer::FanBLEServer(MessageBroker* messageBroker){
-    m_messageBroker = messageBroker;
+FanBLEServer::FanBLEServer(MessageQueueInt* messageQueueInt){
+    m_messageQueueInt = messageQueueInt;
     BLEDevice::init("Vivax Smart Fan");
     BLEServer *pServer = BLEDevice::createServer();
     BLEService *pService = pServer->createService(SERVICE_UUID);
@@ -15,7 +15,7 @@ FanBLEServer::FanBLEServer(MessageBroker* messageBroker){
 
     this->pCharacteristic->setValue("0");
     
-    this->pCharacteristic->setCallbacks(new BleCallbacks(messageBroker));
+    this->pCharacteristic->setCallbacks(new BleCallbacks(messageQueueInt));
     pService->start();
     // BLEAdvertising *pAdvertising = pServer->getAdvertising();  // this still is working for backward compatibility
     BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();

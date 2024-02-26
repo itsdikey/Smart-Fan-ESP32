@@ -2,26 +2,38 @@
 #include "messages/MessageSubscriber.h"
 #include "Arduino.h"
 
-DeviceControlSystem::DeviceControlSystem(MessageBroker* messsageBroker, DeviceState* deviceState){
 
-    class DeviceControlSystemSubscriber : public MessageSubscriber { 
-        void onMessageReceived(TOPIC topic, Message& message){
-            Serial.println(topic);
-        }
-    };
 
-    this->messageBroker = messageBroker;
+
+DeviceControlSystem::DeviceControlSystem(MessageQueueInt* messageQueueInt, DeviceState* deviceState){
+
+    
+    this->m_messageQueueInt = messageQueueInt;
     this->deviceState = deviceState;
 
-    DeviceControlSystemSubscriber* deviceControlSystemSubscriber = new DeviceControlSystemSubscriber();
-    //MessageCallbackType callback = &DeviceControlSystem::onBLEChange;
-    
-    messageBroker->subscribe(TopicBLEChange, *deviceControlSystemSubscriber);
-    messageBroker->subscribe(TopicButtonPressed, *deviceControlSystemSubscriber);
+   
+
+    Serial.println("Pre Subscribe");
+    //messageBroker->subscribe(TopicBLEChange, deviceControlSystemSubscriber);
+    // messageBroker->subscribe(TopicButtonPressed, *deviceControlSystemSubscriber);
 }
 
 void DeviceControlSystem::loop(){
+    if(!m_messageQueueInt->hasMessage())
+        return;
+    switch (m_messageQueueInt->getCurrentMessage()->getTopic())
+    {
+    case TopicBLEChange:
+        Serial.println("TopicBLEChange changed");
+        break;
 
+    case TopicButtonPressed:
+        Serial.println("TopicButtonPressed changed");
+    break;
+    
+    default:
+        break;
+    }
 }
 
 

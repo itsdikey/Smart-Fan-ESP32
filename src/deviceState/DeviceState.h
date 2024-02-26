@@ -1,4 +1,4 @@
-#include "messageBroker/MessageBroker.h"
+#include "messages/MessageQueueInt.h"
 #include "models/enums.h"
 
 #ifndef DEVICE_STATE
@@ -9,7 +9,7 @@ class DeviceState{
     private: 
         FanSpeed m_speed;
         ScreenState m_state;
-        MessageBroker* m_messageBroker;
+        MessageQueueInt* m_messageQueueInt;
 
     public: 
         FanSpeed getSpeed();
@@ -18,7 +18,7 @@ class DeviceState{
         ScreenState getScreenState();
         void setScreenState(ScreenState screenState);
 
-        DeviceState(MessageBroker* messageBroker);
+        DeviceState(MessageQueueInt* messageQueueInt);
 };
 
 #endif

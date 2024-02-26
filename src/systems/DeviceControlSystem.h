@@ -1,5 +1,5 @@
 #include "System.h"
-#include "messageBroker/MessageBroker.h"
+#include "messages/MessageQueueInt.h"
 #include "deviceState/DeviceState.h"
 #include "messages/Topics.h"
 
@@ -8,10 +8,10 @@
 
 class DeviceControlSystem : public System{
     public:
-    DeviceControlSystem(MessageBroker* messageBroker, DeviceState* deviceState);
+    DeviceControlSystem(MessageQueueInt* messageQueueInt, DeviceState* deviceState);
     virtual void loop();
     private: 
-    MessageBroker* messageBroker;
+    MessageQueueInt* m_messageQueueInt;
     DeviceState* deviceState;
 };
 
