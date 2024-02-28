@@ -25,6 +25,7 @@ void DeviceControlSystem::loop(){
     {
     case TopicBLEChange:
         Serial.println("TopicBLEChange changed");
+        Serial1.println(m_messageQueueInt->getCurrentMessage()->getValue());
         break;
 
     case TopicButtonPressed:

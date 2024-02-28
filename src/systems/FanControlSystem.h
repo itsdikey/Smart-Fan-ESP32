@@ -1,15 +1,15 @@
 #include "System.h"
-#include "messageBroker/MessageBroker.h"
+#include "messages/MessageQueueInt.h"
 
 #ifndef FANCONTROLSystem
 #define FANCONTROLSystem
 
 class FanControlSystem : public System{
     public:
-    FanControlSystem(MessageBroker* messageBroker);
+    FanControlSystem(MessageQueueInt* messageQueueInt);
 
     private: 
-    MessageBroker* messageBroker;
+    MessageQueueInt* messageQueueInt;
 };
 
 #endif

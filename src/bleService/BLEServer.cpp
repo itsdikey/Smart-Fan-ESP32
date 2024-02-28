@@ -5,6 +5,8 @@ FanBLEServer::FanBLEServer(MessageQueueInt* messageQueueInt){
     m_messageQueueInt = messageQueueInt;
     BLEDevice::init("Vivax Smart Fan");
     BLEServer *pServer = BLEDevice::createServer();
+
+    pServer->setCallbacks(new MyServerCallbacks());
     BLEService *pService = pServer->createService(SERVICE_UUID);
     this->pCharacteristic = pService->createCharacteristic(
                                             SPEED_CHARACTERISTIC_UUID,
@@ -29,6 +31,8 @@ FanBLEServer::FanBLEServer(MessageQueueInt* messageQueueInt){
 
 void FanBLEServer::setSpeedValue(int value){
     char valueConverted = '0' + value;
+
+    Serial.println(valueConverted);
 
     this->pCharacteristic->setValue(std::string(1, valueConverted));
     this->pCharacteristic->notify(true);

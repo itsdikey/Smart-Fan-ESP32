@@ -7,6 +7,7 @@
 #include <BLEServer.h>
 #include "messages/MessageQueueInt.h"
 #include "messages/Topics.h"
+#include "Arduino.h"
 
 #define SERVICE_UUID        "4e1fd7a0-472e-4fc4-8dad-971c3c585b40" //service
 #define SPEED_CHARACTERISTIC_UUID "19fbc35a-0905-4d26-b607-9af309311e85" //speed characteristic
@@ -19,6 +20,17 @@ class FanBLEServer{
     private:
     MessageQueueInt* m_messageQueueInt;
     BLECharacteristic* pCharacteristic;
+};
+
+class MyServerCallbacks: public BLEServerCallbacks {
+  void onConnect(BLEServer* pServer) {
+    Serial.println("connected");
+  };
+  void onDisconnect(BLEServer* pServer) {
+    Serial.println("disconnected");
+    BLEDevice::stopAdvertising();
+    BLEDevice::startAdvertising();
+  }
 };
 
 class BleCallbacks: public BLECharacteristicCallbacks {
