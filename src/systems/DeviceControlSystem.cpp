@@ -28,14 +28,8 @@ int noteDurations[] = {
 
 
 DeviceControlSystem::DeviceControlSystem(MessageQueueInt* messageQueueInt, DeviceState* deviceState){
-
-    
     this->m_messageQueueInt = messageQueueInt;
     this->deviceState = deviceState;
-
-    Serial.println("Pre Subscribe");
-    //messageBroker->subscribe(TopicBLEChange, deviceControlSystemSubscriber);
-    // messageBroker->subscribe(TopicButtonPressed, *deviceControlSystemSubscriber);
 }
 
 void DeviceControlSystem::loop(){
