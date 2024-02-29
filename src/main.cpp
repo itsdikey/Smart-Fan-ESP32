@@ -23,6 +23,7 @@ void setup() {
 }
 
 void loop() {
+    
     deviceControlSystem->loop();
     bleNotifySystem->loop();
     messageQueueInt->popLast();
