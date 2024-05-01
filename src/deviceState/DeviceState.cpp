@@ -24,5 +24,7 @@ void DeviceState::setScreenState(ScreenState state){
 
 DeviceState::DeviceState(MessageQueueInt* messageBroker){
     this->m_messageQueueInt = messageBroker;
+    this->setSpeed(Speed0);
+    this->setScreenState(On);
 }
 

@@ -8,9 +8,13 @@ class MessageQueueIntItem{
     MessageQueueIntItem(TopicMessage* message, MessageQueueIntItem* prev);
     TopicMessage* getMessage();
     MessageQueueIntItem* getPrev();
+    void setPrev(MessageQueueIntItem* prev);
+    void setDirty(bool dirty);
+    bool getDirty();
     private:
     TopicMessage* m_message;
     MessageQueueIntItem* m_prev;
+    bool isDirty;
 };
 
 class MessageQueueInt{
@@ -20,6 +24,7 @@ class MessageQueueInt{
     bool hasMessage();
     void pushMessage(TopicMessage* message);
     void pushMessage(int topic, int value);
+    void markLastDirty();
     private: 
     MessageQueueIntItem* m_last;
 };

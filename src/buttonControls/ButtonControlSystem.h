@@ -13,9 +13,7 @@ class ButtonControlSystem{
 
     private:
     MessageQueueInt* m_messageQueueInt;
-    ezButton speed_1Button = ezButton(1);
-    ezButton speed_2Button = ezButton(2);
-    ezButton speed_3Button = ezButton(3);
+    ezButton speedButton = ezButton(3);
 };  
 
 

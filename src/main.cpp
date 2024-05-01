@@ -22,11 +22,11 @@ void setup() {
   FanBLEServer *fanBleServer = new FanBLEServer(messageQueueInt);
   deviceControlSystem = new DeviceControlSystem(messageQueueInt, deviceState);
   bleNotifySystem = new BLENotifySystem(messageQueueInt, fanBleServer);
-  displaySystem = new DisplaySystem(messageQueueInt);
+  displaySystem = new DisplaySystem(deviceState);
 }
 
 void loop() {
-    
+    messageQueueInt->markLastDirty();
     deviceControlSystem->loop();
     bleNotifySystem->loop();
     displaySystem->loop();

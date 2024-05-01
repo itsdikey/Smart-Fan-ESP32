@@ -10,9 +10,11 @@ void BLENotifySystem::loop(){
         return;
     switch (m_messageQueue->getCurrentMessage()->getTopic())
     {
-        case TopicBLEChange:
-            m_bleServer->setSpeedValue(m_messageQueue->getCurrentMessage()->getValue());
-        break;
+        // case TopicBLEChange:
+        //     m_bleServer->setSpeedValue(m_messageQueue->getCurrentMessage()->getValue());
+        // break;
+
+        
         
         default:
             break;
