@@ -13,7 +13,8 @@ class ButtonControlSystem{
 
     private:
     MessageQueueInt* m_messageQueueInt;
-    ezButton speedButton = ezButton(3);
+    ezButton* speedButton = new ezButton(3);
+    bool canCheck;
 };  
 
 

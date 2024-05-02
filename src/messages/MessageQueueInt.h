@@ -5,28 +5,28 @@
 
 class MessageQueueIntItem{
     public:
-    MessageQueueIntItem(TopicMessage* message, MessageQueueIntItem* prev);
+    MessageQueueIntItem(TopicMessage* message, MessageQueueIntItem* next);
     TopicMessage* getMessage();
-    MessageQueueIntItem* getPrev();
-    void setPrev(MessageQueueIntItem* prev);
+    MessageQueueIntItem* getNext();
+    void setNext(MessageQueueIntItem* next);
     void setDirty(bool dirty);
     bool getDirty();
     private:
     TopicMessage* m_message;
-    MessageQueueIntItem* m_prev;
+    MessageQueueIntItem* m_next;
     bool isDirty;
 };
 
 class MessageQueueInt{
     public: 
-    void popLast();
+    void popHead();
     TopicMessage* getCurrentMessage();
     bool hasMessage();
     void pushMessage(TopicMessage* message);
-    void pushMessage(int topic, int value);
+    void pushMessage(int topic, int value, char from = 'd');
     void markLastDirty();
     private: 
-    MessageQueueIntItem* m_last;
+    MessageQueueIntItem* m_head;
 };
 
 #endif

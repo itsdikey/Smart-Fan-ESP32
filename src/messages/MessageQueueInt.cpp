@@ -2,9 +2,9 @@
 #include "Arduino.h"
 
 
-MessageQueueIntItem::MessageQueueIntItem(TopicMessage* message, MessageQueueIntItem* prev){
+MessageQueueIntItem::MessageQueueIntItem(TopicMessage* message, MessageQueueIntItem* next){
     m_message = message;
-    m_prev = prev;
+    m_next = next;
     isDirty = false;
 }
 
@@ -12,12 +12,12 @@ TopicMessage* MessageQueueIntItem::getMessage(){
     return m_message;
 }
 
-MessageQueueIntItem* MessageQueueIntItem::getPrev(){
-    return m_prev;
+MessageQueueIntItem* MessageQueueIntItem::getNext(){
+    return m_next;
 }
 
-void MessageQueueIntItem::setPrev(MessageQueueIntItem* prev){
-    this->m_prev = prev;
+void MessageQueueIntItem::setNext(MessageQueueIntItem* next){
+    this->m_next = next;
 }
 
 void MessageQueueIntItem::setDirty(bool dirty){
@@ -29,41 +29,53 @@ bool MessageQueueIntItem::getDirty(){
 }
 
 bool MessageQueueInt::hasMessage(){
-    return m_last!=nullptr;
+    return m_head!=nullptr;
 }
 
 TopicMessage* MessageQueueInt::getCurrentMessage(){
-    if(m_last==nullptr)
+    if(m_head==nullptr)
         return nullptr;
 
-    return m_last->getMessage();
+    return m_head->getMessage();
 }
 
-void MessageQueueInt::popLast(){
-    if(m_last==nullptr)
+void MessageQueueInt::popHead(){
+    if(m_head==nullptr)
         return;
-    if(m_last->getDirty() == false){
+    if(m_head->getDirty() == false){
         return;
     }
-    Serial.println(m_last->getMessage()->getTopic());
-    MessageQueueIntItem* target = m_last->getPrev();
-    m_last->setPrev(nullptr);
+    MessageQueueIntItem* target = m_head->getNext();
+    m_head->setNext(nullptr);
 
-    m_last = target;
+    m_head = target;
     Serial.println("Popped a message");
 }
 
 void MessageQueueInt::markLastDirty(){
-    if(m_last==nullptr)
+    if(m_head==nullptr)
         return;
-    m_last->setDirty(true);
+    m_head->setDirty(true);
 }
 
 void MessageQueueInt::pushMessage(TopicMessage* message){
-    MessageQueueIntItem* newItem = new MessageQueueIntItem(message, m_last);
-    m_last = newItem;
+    if(m_head == nullptr){
+        m_head = new MessageQueueIntItem(message, nullptr);
+    }
+    else{
+        MessageQueueIntItem* targetPrev = m_head;
+
+        while(targetPrev->getNext()!=nullptr){
+            targetPrev = targetPrev->getNext();
+        }
+
+        targetPrev->setNext(new MessageQueueIntItem(message, nullptr));
+    }
+        
+    Serial.println("Push message");
 }
 
-void MessageQueueInt::pushMessage(int topic, int value){
+void MessageQueueInt::pushMessage(int topic, int value, char from){
+    Serial.println(from);
     this->pushMessage(new TopicMessage(topic, value));
 }

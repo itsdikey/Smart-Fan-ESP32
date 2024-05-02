@@ -32,59 +32,57 @@ void DeviceControlSystem::loop()
     int value;
     if (!m_messageQueueInt->hasMessage())
         return;
-    Serial.println("message");
     switch (m_messageQueueInt->getCurrentMessage()->getTopic())
     {
-    case TopicBLEChange:
-        Serial.println("TopicBLEChange changed");
-        value = m_messageQueueInt->getCurrentMessage()->getValue();
-        Serial.println(value);
-        if (value == 1)
-        {
-            deviceState->setSpeed(Speed1);
-            //buzzer.playMelody(melody, noteDurations, 1);
-        }
-        if (value == 2)
-        {
-            deviceState->setSpeed(Speed2);
-            //buzzer.playMelody(melody, noteDurations, 2);
-        }
-
-        if (value == 3)
-        {
-            deviceState->setSpeed(Speed3);
-            //buzzer.playMelody(melody, noteDurations, 3);
-        }
-
-        if (value == 0)
-        {
-            deviceState->setSpeed(Speed0);
-            //buzzer.playMelody(melody2, noteDurations, 3);
-        }
-        break;
-
-    case TopicButtonPressed:
-        switch (deviceState->getSpeed())
-        {
-            case Speed0:
+        case TopicBLEChange:
+            Serial.println("TopicBLEChange changed");
+            value = m_messageQueueInt->getCurrentMessage()->getValue();
+            if (value == 1)
+            {
                 deviceState->setSpeed(Speed1);
-                break;
-            case Speed1:
+                //buzzer.playMelody(melody, noteDurations, 1);
+            }
+            if (value == 2)
+            {
                 deviceState->setSpeed(Speed2);
-                break;
-            case Speed2:
-                deviceState->setSpeed(Speed3);
-                break;
-            case Speed3:
-                deviceState->setSpeed(Speed0);
-                break;
+                //buzzer.playMelody(melody, noteDurations, 2);
+            }
 
-            default:
+            if (value == 3)
+            {
+                deviceState->setSpeed(Speed3);
+                //buzzer.playMelody(melody, noteDurations, 3);
+            }
+
+            if (value == 0)
+            {
                 deviceState->setSpeed(Speed0);
-                break;
-        }
-        Serial.println("TopicButtonPressed changed");
-        break;
+                //buzzer.playMelody(melody2, noteDurations, 3);
+            }
+            break;
+
+        case TopicButtonPressed:
+            switch (deviceState->getSpeed())
+            {
+                case Speed0:
+                    deviceState->setSpeed(Speed1);
+                    break;
+                case Speed1:
+                    deviceState->setSpeed(Speed2);
+                    break;
+                case Speed2:
+                    deviceState->setSpeed(Speed3);
+                    break;
+                case Speed3:
+                    deviceState->setSpeed(Speed0);
+                    break;
+
+                default:
+                    deviceState->setSpeed(Speed0);
+                    break;
+            }
+            Serial.println("TopicButtonPressed changed");
+            break;
 
     default:
         break;

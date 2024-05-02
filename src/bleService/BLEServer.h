@@ -45,7 +45,8 @@ class BleCallbacks: public BLECharacteristicCallbacks {
         Serial.println("value received");
         std::string rxValue = pCharacteristic->getValue();
         int value = rxValue[0] - '0';
-        m_messageQueueInt->pushMessage(TopicBLEChange, value);
+        Serial.println("write part");
+        m_messageQueueInt->pushMessage(TopicBLEChange, value, 'b');
     }
 
     private: 

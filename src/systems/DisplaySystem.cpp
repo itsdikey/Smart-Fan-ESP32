@@ -42,6 +42,7 @@ void DisplaySystem::loop()
 
     if (this->m_deviceState->getSpeed() != this->m_lastSpeed)
     {
+        this->m_lastSpeed = this->m_deviceState->getSpeed();
         this->lastChange = millis();
         u8x8.setPowerSave(false);
     }

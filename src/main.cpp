@@ -4,6 +4,7 @@
 #include "systems/DeviceControlSystem.h"
 #include "systems/BLENotifySystem.h"
 #include "systems/DisplaySystem.h"
+#include "buttonControls/ButtonControlSystem.h"
 #include "messages/Topics.h"
 #include <Arduino.h>
 
@@ -11,6 +12,7 @@ MessageQueueInt* messageQueueInt;
 DeviceControlSystem *deviceControlSystem ;
 BLENotifySystem* bleNotifySystem;
 DisplaySystem* displaySystem;
+ButtonControlSystem* buttonSystem;
 
 
 void setup() {
@@ -21,14 +23,17 @@ void setup() {
   DeviceState *deviceState = new DeviceState(messageQueueInt);
   FanBLEServer *fanBleServer = new FanBLEServer(messageQueueInt);
   deviceControlSystem = new DeviceControlSystem(messageQueueInt, deviceState);
-  bleNotifySystem = new BLENotifySystem(messageQueueInt, fanBleServer);
+  bleNotifySystem = new BLENotifySystem(messageQueueInt, fanBleServer, deviceState);
   displaySystem = new DisplaySystem(deviceState);
+  buttonSystem = new ButtonControlSystem(messageQueueInt);
 }
 
 void loop() {
     messageQueueInt->markLastDirty();
     deviceControlSystem->loop();
-    bleNotifySystem->loop();
     displaySystem->loop();
-    messageQueueInt->popLast();
+    buttonSystem->loop();
+    bleNotifySystem->loop();
+    messageQueueInt->popHead();
+    //delay(1000);
 }
